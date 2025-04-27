@@ -1,5 +1,11 @@
 "use client";
 
+import { signIn, signUp } from "@/lib/actions/auth.action";
+import {
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+} from "firebase/auth";
+
 import { Button } from "@/components/ui/button";
 import { Form } from "@/components/ui/form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -9,6 +15,7 @@ import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
+import { auth } from "../firebase/client";
 import FormField from "./ui/FormField";
 
 const authFormSchema = (type: string) =>
@@ -17,6 +24,11 @@ const authFormSchema = (type: string) =>
       type === "sign-up"
         ? z.string().min(1, "Name is required")
         : z.string().optional(),
+    email: z.string().email("Invalid email"),
+    password: z
+      .string()
+      .min(8, "Password must be at least 8 characters")
+      .max(20, "Password must be at most 20 characters"),
   });
 
 const AuthForm = ({ type }: { type: FormType }) => {
@@ -30,14 +42,46 @@ const AuthForm = ({ type }: { type: FormType }) => {
     },
   });
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
+  async function onSubmit(values: z.infer<typeof formSchema>) {
     console.log(values);
     try {
       if (isSignIn) {
-        toast.success("Sign In successful");
+        const { email, password } = values;
+        const userCredentials = await signInWithEmailAndPassword(
+          auth,
+          email,
+          password
+        );
+        const idToken = await userCredentials.user.getIdToken();
+        if (!idToken) {
+          toast.error("Sign in failed");
+          return;
+        }
+        await signIn({
+          email,
+          idToken,
+          password,
+        });
+        await toast.success("Sign In successful");
         router.push("/");
         console.log("values", values);
       } else {
+        const { name, email, password } = values;
+        const userCredentials = await createUserWithEmailAndPassword(
+          auth,
+          email,
+          password
+        );
+        const result = await signUp({
+          uid: userCredentials.user.uid,
+          name,
+          email,
+          password,
+        });
+        if (!result?.success) {
+          toast.error(result?.message);
+          return;
+        }
         toast.success("Account created successfully, Please Sign In");
         router.push("/sign-in");
         console.log("values", values);
