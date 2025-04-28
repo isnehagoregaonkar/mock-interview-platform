@@ -1,5 +1,12 @@
+import Agent from "@/components/Agent";
+
 const Page = () => {
-  return <div>Page</div>;
+  return (
+    <>
+      <h3>Interview Generation</h3>
+      <Agent username="You" />
+    </>
+  );
 };
 
 export default Page;
