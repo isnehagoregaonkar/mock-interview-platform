@@ -8,6 +8,7 @@ import {
 
 import { Button } from "@/components/ui/button";
 import { Form } from "@/components/ui/form";
+import { auth } from "@/firebase/client";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Image from "next/image";
 import Link from "next/link";
@@ -15,8 +16,7 @@ import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
-import { auth } from "../firebase/client";
-import FormField from "./ui/FormField";
+import FormField from "./FormField";
 
 const authFormSchema = (type: string) =>
   z.object({
@@ -37,9 +37,7 @@ const AuthForm = ({ type }: { type: FormType }) => {
   const router = useRouter();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
-    defaultValues: {
-      name: "",
-    },
+    defaultValues: {},
   });
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
@@ -62,7 +60,7 @@ const AuthForm = ({ type }: { type: FormType }) => {
           idToken,
           password,
         });
-        await toast.success("Sign In successful");
+        toast.success("Sign In successful");
         router.push("/");
         console.log("values", values);
       } else {
