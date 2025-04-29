@@ -4,7 +4,7 @@ const Page = () => {
   return (
     <>
       <h3>Interview Generation</h3>
-      <Agent username="You" />
+      <Agent userName="You" type="generate" />
     </>
   );
 };
