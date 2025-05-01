@@ -194,7 +194,7 @@
   }
 
   .form {
-    @apply w-full p-4;
+    @apply w-full;
 
     .label {
       @apply !text-light-100 !font-normal;
