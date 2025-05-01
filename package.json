@@ -44,7 +44,7 @@
     "typescript": "^5"
   },
   "optionalDependencies": {
-    "lightningcss": "^1.21.0"
+    "lightningcss": "^1.29.3"
   },
   "engines": {
     "node": "20.x"
