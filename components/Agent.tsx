@@ -1,5 +1,5 @@
-import Image from "next/image";
 import { cn } from "@/lib/utils";
+import Image from "next/image";
 
 enum CallStatus {
   INACTIVE = "INACTIVE",
@@ -63,7 +63,7 @@ const Agent = ({ userName }: AgentProps) => {
             <span
               className={cn(
                 "animate-ping rounded-full opacity-75",
-                (callStatus === "CONNECTING") & "hidden"
+                callStatus === "CONNECTING" && "hidden"
               )}
             />
             <span>
