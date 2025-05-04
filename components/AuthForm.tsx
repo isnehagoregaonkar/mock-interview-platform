@@ -41,7 +41,6 @@ const AuthForm = ({ type }: { type: FormType }) => {
   });
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log(values);
     try {
       if (isSignIn) {
         const { email, password } = values;
@@ -62,7 +61,6 @@ const AuthForm = ({ type }: { type: FormType }) => {
         });
         toast.success("Sign In successful");
         router.push("/");
-        console.log("values", values);
       } else {
         const { name, email, password } = values;
         const userCredentials = await createUserWithEmailAndPassword(
@@ -82,15 +80,13 @@ const AuthForm = ({ type }: { type: FormType }) => {
         }
         toast.success("Account created successfully, Please Sign In");
         router.push("/sign-in");
-        console.log("values", values);
       }
     } catch (error) {
-      console.log(error);
       toast.error(`Error occurred: ${error}`);
     }
   }
   return (
-    <div className="card-border lg:min-w-[566px]">
+    <div className="card-border lg:min-w-[566px] p-4">
       <div className="flex flex-col gap-6 card py-14 px-10 items-center">
         <div className="flex flex-row gap-2 justify-center">
           <Image src={"/logo.svg"} alt="logo" width={32} height={38} />
