@@ -131,3 +131,48 @@ export async function isAuthenticated() {
   const user = await getCurrentUser();
   return !!user;
 }
+
+export async function getInterviewByUserId(
+  userId: string
+): Promise<Interview[] | null> {
+  try {
+    const interviews = await db
+      .collection("interviews")
+      .where("userid", "==", userId)
+      .orderBy("createdAt", "desc")
+      .get();
+    return interviews.docs.map((doc) => ({
+      ...doc.data(),
+      id: doc.id,
+    })) as Interview[];
+  } catch (error) {
+    console.error("Error fetching interviews:", error);
+  }
+}
+
+export async function getLatestInterviews(
+  params: GetLatestInterviewsParams
+): Promise<Interview[] | null> {
+  try {
+    const { userId, limit = 20 } = params;
+    const interviews = await db
+      .collection("interviews")
+      .where("userid", "!=", userId)
+      .orderBy("createdAt", "desc")
+      // .where("finalized", "==", true)
+      .get();
+    console.log("interviews", interviews);
+    return interviews.docs.map((doc) => ({
+      ...doc.data(),
+      id: doc.id,
+    })) as Interview[];
+  } catch (error) {
+    console.error("Error fetching interviews:", error);
+  }
+}
+
+export async function getInterviewById(id: string): Promise<Interview | null> {
+  const interview = await db.collection("interviews").doc(id).get();
+
+  return interview.data() as Interview | null;
+}
