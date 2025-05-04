@@ -34,13 +34,15 @@ export async function getLatestInterviews(
       .orderBy("createdAt", "desc")
       // .where("finalized", "==", true)
       .get();
-    console.log("interviews", interviews);
     return interviews.docs.map((doc) => ({
       ...doc.data(),
       id: doc.id,
     })) as Interview[];
   } catch (error) {
-    console.error("Error fetching interviews:", error);
+    return {
+      success: false,
+      message: "Failed to fetch interviews",
+    };
   }
 }
 
@@ -121,7 +123,6 @@ export async function getFeedbackByInterviewId(
     if (feedback.empty) return null;
     const feedbackDoc = feedback.docs[0];
 
-    console.log("feedback gen", feedback);
     return {
       id: feedbackDoc.id,
       ...feedbackDoc.data(),

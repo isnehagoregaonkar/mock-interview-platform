@@ -4,10 +4,10 @@ import {
 } from "@/lib/actions/general.action";
 
 import { Button } from "@/components/ui/button";
+import { getCurrentUser } from "@/lib/actions/auth.action";
+import dayjs from "dayjs";
 import Image from "next/image";
 import Link from "next/link";
-import dayjs from "dayjs";
-import { getCurrentUser } from "@/lib/actions/auth.action";
 import { redirect } from "next/navigation";
 
 const Feedback = async ({ params }: RouteParams) => {
@@ -21,7 +21,6 @@ const Feedback = async ({ params }: RouteParams) => {
     interviewId: id,
     userId: user?.id!,
   });
-  console.log("feedback", feedback);
 
   return (
     <section className="section-feedback">
