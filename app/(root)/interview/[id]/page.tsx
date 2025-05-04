@@ -1,7 +1,7 @@
-import { getCurrentUser, getInterviewById } from "@/lib/actions/auth.action";
-
 import Agent from "@/components/Agent";
 import DisplayTechIcons from "@/components/DisplayTechIcons";
+import { getCurrentUser } from "@/lib/actions/auth.action";
+import { getInterviewById } from "@/lib/actions/general.action";
 import { getRandomInterviewCover } from "@/lib/utils";
 import Image from "next/image";
 import { redirect } from "next/navigation";
